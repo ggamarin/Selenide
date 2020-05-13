@@ -1,0 +1,17 @@
+image: Ubuntu
+
+stack: jdk 11
+branches:
+  only:
+    - master
+
+build: off
+
+install:
+  - ps: $App = Start-Process -FilePath java -ArgumentList "-jar ./artifacts/app-card-delivery.jar" -PassThru
+
+build_script:
+  - ps: ./gradlew test --info "-Dselenide.headless=true"
+
+on_finish:
+  - ps: Stop-Process -Id $App.Id
